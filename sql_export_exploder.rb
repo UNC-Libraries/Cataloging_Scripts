@@ -9,7 +9,7 @@ lines.each {|l|
   l.gsub! /",([0-9]*),([0-9]*),"/, "\",\"\\1\",\"\\2\",\""
   l.gsub! /^"(.*)"$/, "\\1"
   larr = l.split(/","/)
-  puts larr.inspect
+#  puts larr.inspect
   larr = [larr[1], larr[3], larr[4], larr[5], larr[6], larr[7]] 
   linearr << larr
 }
@@ -20,6 +20,8 @@ line_hashes = []
 
 linearr.each {|l|
   h = Hash[*headers.zip(l).flatten]
+#  puts l.inspect
+#  puts 1[5].inspect
   subfields = l[5].gsub(/^\|/,"").split(/\|/)
 
   subfields.each {|sf|
