@@ -9,16 +9,17 @@
 ## o 81
 
 ## Field delimiter: Control character 9
-## File location/name: 
-### r:/doc/personalOutput/code/sersolsol/data/sersol_deletes.txt
 
 # Run: 
-## jruby -S bin/check_sersol_urls.rb
+## jruby -S bin/check_sersol_urls.rb [input file] [output file]
 
 
 require 'rubygems'
 require 'celerity'
 require 'csv'
+
+infile = ARGV[0]
+outfile = ARGV[1]
 
 Row = Struct.new(:bnum, :ssnum, :access, :url, :db, :title, :order, :loc, :ostat, :locstat)
 
@@ -26,8 +27,8 @@ OTHERLIBS = ["k", "kdav", "kdcd", "kdfc", "kdoc", "kdvd", "kfa5", "kfac", "kfapd
 
 rows = [] # holds initial Rows constructed from text file
 
-file = 'data/sersol_deletes.txt'
-file_lines = IO.readlines(file)
+
+file_lines = IO.readlines(infile)
 
 # split lines at tabs
 # create Row struct from each line and send that row to "unprocessed"
@@ -98,7 +99,7 @@ rows.each do |r|
 end
 
 
-CSV.open('data/delete_report.csv', "wb") do |csv|
+CSV.open(outfile, "wb") do |csv|
   csv << ['Record #', 'SS#', 'URL', 'Access?', 'Database', 'Title', 'Notes', "Note", "Order record?", "Other libraries?"]
   rows.each do |r|
     csv << [r.bnum, r.ssnum, r.url, r.access, r.db, r.title, "", "", r.ostat, r.locstat]
