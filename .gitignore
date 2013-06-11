@@ -1,4 +1,6 @@
 *.exe
+*.txt
+*.csv
 data/
 output/
 Ebook-Access-Checker/
