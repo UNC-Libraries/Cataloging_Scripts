@@ -3,7 +3,6 @@ require 'csv'
 
 log = File.open('data/log.txt', "r").read
 recs = log.split(/^Record/)
-csvlog = File.new('output/logtsv.txt', "w")
 
 p log
 
@@ -45,9 +44,15 @@ lines.each do |line|
     s.skip_until /:\s*/
     @rec << s.post_match
   elsif @errstate == 1
-    s = StringScanner.new(line)
-    s.scan /^(\d{3})(-)(.*?)(:\s*)(.*)/
-    @errs << [s[1], s[3], s[5]]
+    if line =~ /^\d{3}-.*?:\s*.*/
+      s = StringScanner.new(line)
+      s.scan /^(\d{3})(-)(.*?)(:\s*)(.*)/
+      @errs << [s[1], s[3], s[5]]
+    elsif line =~ /^\d{3}:\s*.*/
+      s = StringScanner.new(line)
+      s.scan /^(\d{3})(:\s*)(.*)/
+      @errs << [s[1], '', s[3]]
+    end
   end
 
   puts "#{@errstate}\t#{line}"
