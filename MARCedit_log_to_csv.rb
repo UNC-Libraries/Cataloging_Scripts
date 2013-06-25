@@ -20,7 +20,7 @@ lines.delete ""
 @errors = []
 @errstate = 0
 @rec = []
-@errs = []
+@errs = [["Field", "Part", "Error msg", "Rec ID", "Title"]]
 
 lines.each do |line|
   if line =~ /^Record #:/
