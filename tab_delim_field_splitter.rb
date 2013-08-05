@@ -40,8 +40,12 @@ lines.each do |l|
   line = l.split(/\t/)
   other_fields = line.shift(to_split_index)
   field_to_split = line.shift
-  
-  splits = field_to_split.split(";")
+
+  if field_to_split
+   splits = field_to_split.split(";")
+  else
+    splits = ['']
+  end
 
   line_hash[other_fields] = splits
 end
