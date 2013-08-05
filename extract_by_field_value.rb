@@ -9,6 +9,7 @@ require "marc"
 mrcfile = ARGV[0]
 valfile = ARGV[1]
 tag = ARGV[2]
+subfield = ARGV[3]
 
 @recs = []
 MARC::Reader.new(mrcfile).each {|rec| @recs << rec}
@@ -29,7 +30,8 @@ end
 @nomatch = []
 
 @recs.each do |rec|
-  val = rec[tag].value
+  val = rec[tag].value unless subfield
+  val = rec[tag][subfield] if subfield
   #puts val
   lookup = oak.find(val).values
   #p lookup
