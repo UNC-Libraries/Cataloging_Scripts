@@ -5,3 +5,5 @@ data/
 output/
 Ebook-Access-Checker/
 Millennium-Helpers/
+*.mrk
+*.mrc
