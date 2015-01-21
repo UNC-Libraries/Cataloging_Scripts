@@ -1,8 +1,8 @@
 require 'rubygems'
 require 'marc'
 
-mrcfile = 'data/new_springer_marc.mrc'
-file = 'data/existing_springer.txt'
+mrcfile = 'new_springer_marc.mrc'
+file = 'existing_springer.txt'
 file_lines = IO.readlines(file)
 file_lines.shift
 
@@ -31,7 +31,7 @@ file_lines.each do |ln|
   urls = _856s + _956s
   
   urls.each do |url|
-    url.sub!("http://eresources.lib.unc.edu/external_db/external_database_auth.html?A=P%7CF=N%7CID=24%7CREL=AAL%7CURL=http://libproxy.lib.unc.edu/login?url=", "")
+    url.sub!("http://libproxy.lib.unc.edu/login?url=", "")
   end
   
   exrec << urls.sort 
