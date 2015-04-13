@@ -43,7 +43,7 @@ MARC::Reader.new(mrcfile).each do |rec|
 
     if match_value
       rec.fields.delete(rec['019'])
-      new019 = MARC::DataField.new('019', '', '', ['a', the_one])
+      new019 = MARC::DataField.new('019', ' ', ' ', ['a', the_one])
       if not_the_one.count > 0
         not_the_one.each do |val|
           new019.append(MARC::Subfield.new('a', val))
