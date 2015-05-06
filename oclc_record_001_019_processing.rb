@@ -32,17 +32,19 @@ suffix = ask("What's the 001 suffix for this collection? (examples: spr, acs, et
 
 existing_001s = []
 
-File.open(valfile, "r").readlines.each do |ln|
-  line = ln.chomp
-  if usesuffix == 'y'
-    if line.end_with?(suffix)
-      existing_001s << line
+if File.exist?(valfile)
+  File.open(valfile, "r").readlines.each do |ln|
+    line = ln.chomp
+    if usesuffix == 'y'
+      if line.end_with?(suffix)
+        existing_001s << line
+      else
+        errs << ['001 list',line,'001 in catalog missing suffix'] unless line == '001'
+        existing_001s << line + suffix
+      end
     else
-      errs << ['001 list',line,'001 in catalog missing suffix'] unless line == '001'
-      existing_001s << line + suffix
+      existing_001s << line
     end
-  else
-    existing_001s << line
   end
 end
 
@@ -127,7 +129,6 @@ MARC::Reader.new(mrcfile).each do |rec|
       end
       rec << new019
     else
-      ct_no_match += 1 unless match_on_001
       new019 = MARC::DataField.new('019', ' ', ' ', [])
       if no_match_019s.count > 0
         no_match_019s.each do |val|
@@ -141,6 +142,8 @@ MARC::Reader.new(mrcfile).each do |rec|
       errs << ['MARC', the_001, 'Match on both 001 and 019']
     end
   end
+
+  ct_no_match += 1 unless match_on_001 || match_on_019
 
   if splitfile == 'y'
     if match_on_001
