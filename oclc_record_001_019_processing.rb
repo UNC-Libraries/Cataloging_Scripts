@@ -129,7 +129,7 @@ MARC::Reader.new(mrcfile).each do |rec|
       end
       rec << new019
     else
-      new019 = MARC::DataField.new('019', ' ', ' ', [])
+      new019 = MARC::DataField.new('019', ' ', ' ')
       if no_match_019s.count > 0
         no_match_019s.each do |val|
           new019.append(MARC::Subfield.new('a', val))
@@ -139,7 +139,7 @@ MARC::Reader.new(mrcfile).each do |rec|
     end
 
     if match_on_001 && match_on_019
-      errs << ['MARC', the_001, 'Match on both 001 and 019']
+      errs << ['MARC', the_001, 'Match on both 001 and 019. Edited record output only to 001-match file if split file option was used.']
     end
   end
 
@@ -156,7 +156,7 @@ MARC::Reader.new(mrcfile).each do |rec|
   else
     marcwriter.write(rec)
   end
-end
+  end
 
 puts "#{ct_recs} : record in incoming MARC file\n"
 puts "#{ct_match_001} : records matching on 001\n"
