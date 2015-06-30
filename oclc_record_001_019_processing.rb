@@ -17,34 +17,39 @@ require "highline/import"
 mrcfile = "data/recs.mrc"
 valfile = "data/001s.txt"
 
+unless File.exist?(mrcfile)
+  puts "\n\nERROR: #{mrcfile} is missing. Please check file names and run script again.\n\n"
+  exit
+end
+
+unless File.exist?(valfile)
+  puts "\n\nERROR: #{valfile} is missing. Please check file names and run script again.\n\n"
+  exit
+end
+
 t = Time.now
 timestring = t.strftime("%Y-%m-%d_%H-%M")
 
 log = "output/log_#{timestring}.csv"
 errs = [['Source','001 value','Message']]
 
-splitfile = ask("Do you want to split the .mrc file based on how the records match (on 001, 019, or not at all)? y/n")
-
-usesuffix = ask("Does this collection use a suffix on the 001? y/n")
-
-
-suffix = ask("What's the 001 suffix for this collection? (examples: spr, acs, etc...") if usesuffix == 'y'
-
 existing_001s = []
 
-if File.exist?(valfile)
-  File.open(valfile, "r").readlines.each do |ln|
-    line = ln.chomp
-    if usesuffix == 'y'
-      if line.end_with?(suffix)
-        existing_001s << line
-      else
-        errs << ['001 list',line,'001 in catalog missing suffix'] unless line == '001'
-        existing_001s << line + suffix
-      end
-    else
+splitfile = ask("Do you want to split the .mrc file based on how the records match (on 001, 019, or not at all)? y/n")
+usesuffix = ask("Does this collection use a suffix on the 001? y/n")
+suffix = ask("What's the 001 suffix for this collection? (examples: spr, acs, etc...") if usesuffix == 'y'
+
+File.open(valfile, "r").readlines.each do |ln|
+  line = ln.chomp
+  if usesuffix == 'y'
+    if line.end_with?(suffix)
       existing_001s << line
+    else
+      errs << ['001 list',line,'001 in catalog missing suffix'] unless line == '001'
+      existing_001s << line + suffix
     end
+  else
+    existing_001s << line
   end
 end
 
