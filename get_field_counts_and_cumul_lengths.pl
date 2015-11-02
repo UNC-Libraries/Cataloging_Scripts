@@ -1,20 +1,22 @@
 #!/usr/bin/perl
 #
-# Summary: Takes tab delimited text file (with bnum, item id (barcode), and enumeration/chronology)
-#          as input and outputs MARC-XML file of bibliographic records, as per
-#          HathiTrust specifications
+# Summary: Takes as input a text list (with UNIX line endings) of bib record
+#   numbers, sans check digits, path to write output file, and comma-separated
+#   list of MARC tags.
 #
-# Usage: perl marc-xml_builder.pl [input file] [output file]
+#   Returns tab-delimited file with one row per record and two columns per
+#   MARC tag entered:
+#   (1) field ct -- how many instances of that field exist in the record
+#   (2) field len -- cumulative field length -- i.e. if there are 2 505 fields
+#       of lengths 123 and 111, this will be 234.
 #
-# Author: Kristina Spurgin (2015-07-29 - )
+#   Used to diagnose which records are causing problems when III Millennium
+#   global updates or other processes fail.
 #
-# Dependencies:
-#    /htdocs/connects/afton_iii_iiidba_perl.inc
+# Usage: perl get_field_counts_and_cumul_lengths.pl [input file] [output file] [marc tag list]
+# Example: perl get_field_counts_and_cumul_lengths.pl bnums.txt out.txt 505,856,700
 #
-# Important usage notes:
-# UTF8 is the biggest factor in this script.  in addition to the use utf8
-# declaration at the head of the script, we must also explicitly set the mode of
-# any output to utf8.
+# Author: Kristina Spurgin (2015-11-02 - )
 
 #***********************************************************************************
 # Declarations
@@ -24,10 +26,7 @@ use DBI;
 use  DBD::Oracle;
 use utf8;
 use locale;
-use Net::SSH2;
-use List::Util qw(first);
 use File::Basename;
-use Getopt::Long; #allows for use of testing mode, http://perldoc.perl.org/Getopt/Long.html
 
 # set character encoding for stdout to utf8
 binmode(STDOUT, ":utf8");
