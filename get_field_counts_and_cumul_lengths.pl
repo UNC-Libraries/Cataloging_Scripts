@@ -16,6 +16,8 @@
 # Usage: perl get_field_counts_and_cumul_lengths.pl [input file] [output file] [marc tag list]
 # Example: perl get_field_counts_and_cumul_lengths.pl bnums.txt out.txt 505,856,700
 #
+# Location: lives on primary server for interacting with afton, in /scripts/lms
+#
 # Author: Kristina Spurgin (2015-11-02 - )
 
 #***********************************************************************************
