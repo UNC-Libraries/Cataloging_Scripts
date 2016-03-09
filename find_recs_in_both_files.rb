@@ -1,3 +1,10 @@
+# -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+# PURPOSE: Creates a file containing the MARC records that exist in BOTH input files
+# USAGE:
+#  ruby find_recs_in_both_files.rb inputfilea inputfileb outputfile
+#  - all input and output files must be raw MARC (.mrc, .dat, etc.) files
+# -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+
 require 'rubygems'
 require 'marc'
 require 'set'
@@ -45,6 +52,3 @@ MARC::Reader.new(b).each do |rec|
          
   writer = MARC::Writer.new(out)
   wrecs.each {|rec| writer.write(rec)}
-  
-    
-  
