@@ -3,6 +3,7 @@
 # USAGE:
 #  ruby find_recs_in_both_files.rb inputfilea inputfileb outputfile
 #  - all input and output files must be raw MARC (.mrc, .dat, etc.) files
+#  - comparison is based on value of 001 field---it does not compare entire records against one another
 # -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 
 require 'rubygems'

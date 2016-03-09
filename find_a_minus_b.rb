@@ -1,3 +1,11 @@
+# -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+# PURPOSE: Creates a file containing the MARC records that exist in file a, but not in file b
+# USAGE:
+#  ruby find_a_minus_b.rb inputfilea inputfileb outputfile
+#  - all input and output files must be raw MARC (.mrc, .dat, etc.) files
+#  - comparison is based on value of 001 field---it does not compare entire records against one another
+# -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+
 require 'marc'
 
 a = ARGV[0]
@@ -39,8 +47,4 @@ MARC::Reader.new(a).each do |rec|
 end #MARC::Reader.new(a).each do |rec|
 print "#{keeper_ct} records in #{a} and not in #{b}."
 
-
 writer.close
-  
-    
-  
