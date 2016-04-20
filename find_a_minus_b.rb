@@ -1,9 +1,12 @@
 # -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-# PURPOSE: Creates a file containing the MARC records that exist in file a, but not in file b
+# PURPOSE: Takes 2 files (a and b) as input. Creates a new file containing the MARC records from file a, that are not also in file b. Put another way: creates a new file containing the unique records from file a.
+
 # USAGE:
 #  ruby find_a_minus_b.rb inputfilea inputfileb outputfile
 #  - all input and output files must be raw MARC (.mrc, .dat, etc.) files
 #  - comparison is based on value of 001 field---it does not compare entire records against one another
+
+# Tested with Ruby version 2.0.0
 # -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 
 require 'marc'
