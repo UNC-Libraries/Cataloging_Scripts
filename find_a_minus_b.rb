@@ -48,6 +48,6 @@ MARC::Reader.new(a).each do |rec|
     end
   end
 end #MARC::Reader.new(a).each do |rec|
-puts "#{keeper_ct} records in #{a} and not in #{b}."
+puts "\n\nDONE! #{keeper_ct} records in #{a} and not in #{b}."
 
 writer.close
