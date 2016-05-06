@@ -17,8 +17,10 @@ out = ARGV[2]
 ra = []
 rb = []
 
-
+puts "Reading in records from #{a}..."
+a_ct = 0
 MARC::Reader.new(a).each do |rec|
+  a_ct += 1
   m001s = rec.find_all {|field| field.tag == '001'}
   if m001s.size > 1
     puts "#{a} contains record with more than 1 001, including #{m001s[0].value}. Results do not include this record!"
@@ -28,8 +30,12 @@ MARC::Reader.new(a).each do |rec|
     ra << m001s[0].value
   end
 end #MARC::Reader.new(a).each do
+puts "#{a_ct} records in #{a}."
 
+puts "Reading in records from #{b}..."
+b_ct = 0
 MARC::Reader.new(b).each do |rec|
+  b_ct += 1
   m001s = rec.find_all {|field| field.tag == '001'}
   if m001s.size > 1
     puts "#{b} contains record with more than 1 001, including #{m001s[0].value}. Results do not include this record!"
@@ -38,18 +44,21 @@ MARC::Reader.new(b).each do |rec|
   else
     rb << m001s[0].value
   end
-  end #MARC::Reader.new(b).each do |rec|
+end #MARC::Reader.new(b).each do |rec|
+puts "#{b_ct} records in #{b}."
 
+rintersect = ra & rb
 
-  rintersect = ra & rb
+puts "Number of records in both files: #{rintersect.size}"
+
+if rintersect.size > 0
   wrecs = []
   MARC::Reader.new(a).each do |rec|
     the001 = rec['001'].value
     wrecs << rec if rintersect.include?(the001)
   end #MARC::Reader.new(a).each do |rec|
-  
-    puts "FOUND: #{wrecs.size}"
-         
+
   writer = MARC::Writer.new(out)
   wrecs.each {|rec| writer.write(rec)}
   writer.close
+end
