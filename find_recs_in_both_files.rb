@@ -9,7 +9,6 @@
 require 'rubygems'
 require 'marc'
 require 'set'
-require 'marc_extended'
 
 a = ARGV[0]
 b = ARGV[1]
@@ -53,3 +52,4 @@ MARC::Reader.new(b).each do |rec|
          
   writer = MARC::Writer.new(out)
   wrecs.each {|rec| writer.write(rec)}
+  writer.close
