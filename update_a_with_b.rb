@@ -32,7 +32,11 @@ def get_001(rec)
   end
 end
 
-puts "Getting records from #{a}..."
+# First we create a hash which tells us which file each record should be written from
+# Later we go through each input file again and write each record out only if it is supposed to come from that file
+# This has to be done in 2 passes to avoid memory allocation failures at record write time
+
+puts "Getting record info from #{a}..."
 a_ct = 0
 a_err_ct = 0
 a_ok_ct = 0
@@ -43,12 +47,12 @@ MARC::Reader.new(a).each do |rec|
     puts "Record number #{a_ct} in #{a} does NOT have one 001 field. Results do not include this record!"
     a_err_ct += 1
   else
-    rec_hash[the001] = rec
+    rec_hash[the001] = "a"
     a_ok_ct += 1
   end
 end
 
-puts "Getting records from #{b}..."
+puts "Getting record info from #{b}..."
 b_ct = 0
 b_err_ct = 0
 b_new_ct = 0
@@ -66,11 +70,9 @@ MARC::Reader.new(b).each do |rec|
     else
       b_new_ct += 1
     end
-    rec_hash[the001] = rec
+    rec_hash[the001] = "b"
   end
 end 
-
-
  
 puts "#{a_ct} records in #{a}, with #{a_err_ct} abnormal 001s."
 puts "#{b_ct} records in #{b}, with #{b_err_ct} abnormal 001s."
@@ -79,7 +81,23 @@ puts "#{b_new_ct} new records added from #{b}."
 puts "Writing #{rec_hash.size} total records to #{outfile}..."
 
 writer = MARC::Writer.new(outfile)
-rec_hash.each_value {|rec| writer.write(rec)}
+
+puts "Writing records from #{a}..."
+MARC::Reader.new(a).each do |rec|
+  the001 = get_001(rec)
+  if rec_hash[the001] == "a"
+    writer.write(rec)
+  end
+end
+
+puts "Writing records from #{b}..."
+MARC::Reader.new(b).each do |rec|
+  the001 = get_001(rec)
+  if rec_hash[the001] == "b"
+    writer.write(rec)
+  end
+end
+
 writer.close
 
 puts "#{outfile} written successfully. Done!"
