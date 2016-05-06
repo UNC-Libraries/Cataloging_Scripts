@@ -49,7 +49,7 @@ end
   end
 
 if @errs.count > 0
-  CSV.open("output/validation_errors.csv", 'wb') do |csv|
+  CSV.open("data/validation_errors.csv", 'wb') do |csv|
     @errs.each {|r| csv << r}
   end
 else
