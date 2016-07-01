@@ -108,7 +108,7 @@ MARC::Reader.new(mrcfile).each do |rec|
     # If the number of 001s is ok, clean the value so it consists of numbers only
     # Append suffix if applicable
     the_001 = rec['001'].value
-    the_001.sub!(/^(ocn|ocm|on)/,'')
+    the_001.sub!(/\D/,'')
 
     if usesuffix == 'y'
       the_001 += suffix
