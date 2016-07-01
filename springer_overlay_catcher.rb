@@ -76,20 +76,23 @@ MARC::Reader.new(mrcfile).each {|rec| @newrecs << rec}
   #get sorted array of urls
   
   urls = []
+  murls = []
   matches = []
   
   rec.each_by_tag('856') {|field| urls << field['u'] }
   urls.sort!
 
   urls.each do |url|
-    urlindex[url].each {|m| matches << m} if urlindex[url]
+    murl = url.sub("http://libproxy.lib.unc.edu/login?url=", "")
+    murls << murl
+    urlindex[murl].each {|m| matches << m} if urlindex[murl]
   end
   
   matches.uniq!
   
   if matches.length == 1
     exurlset = matches[0][1]
-    if urls == exurlset
+    if murls == exurlset
       puts "exact match 1, #{matches[0][0]}"
       #move 001 to 598
       _598 = MARC::DataField.new('598', ' ', ' ', ['a', rec['001'].value])
@@ -108,7 +111,7 @@ MARC::Reader.new(mrcfile).each {|rec| @newrecs << rec}
   elsif matches.length > 1
     exactmatches = []
     matches.each do |match|
-      exactmatches << match if match[1] == urls
+      exactmatches << match if match[1] == murls
     end
     if exactmatches.length == 1
       #move 001 to 598
