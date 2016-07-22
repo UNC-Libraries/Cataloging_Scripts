@@ -17,7 +17,11 @@ ct = 0
 MARC::Reader.new(a).each do |rec|
   ct += 1
   m001s = rec.find_all {|field| field.tag == '001'}
-  the001 = m001s[0].value
+  if m001s.size > 0
+    the001 = m001s[0].value
+  else
+    the001 = ''
+  end
   rec.fields.each do |f|
     field_string = f.to_s
     field_string.gsub!(/^... .. /, '')
