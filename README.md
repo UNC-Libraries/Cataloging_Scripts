@@ -52,14 +52,12 @@ NOTES:
 
 ## check_character_encoding.rb
 PURPOSE:
+Creates two new .mrc files in the same location as the input file. One of the new files will have _UTF8.mrc on the end and the other will have _MARC8.mrc on the end. Writes each record from the input file to the appropriate new file based on the value of LDR/09 and provides a count of records in each encoding. 
 
 USAGE:
 ```
-.
+ruby check_character_encoding.rb path_to/mrc_file.mrc
 ```
-
-NOTES:
-* .
 
 ## check_sersol_urls.rb
 PURPOSE:
@@ -271,6 +269,15 @@ USAGE:
 
 NOTES:
 * .
+
+## shift_record_ids.rb
+PURPOSE:
+Testing a nasty III bug. Will have limited other use unless you really want to mess stuff up. It takes an input .mrc file and updates all the 001 values so that Record 1's 001 is assigned to Record 2, Record 2's 001 is assigned to Record 3, and so on. The 001 of the last record in the file is assigned to Record 1. 
+
+USAGE:
+```
+ruby shift_record_ids.rb path-to-mrc-file.mrc output-path.mrc
+```
 
 ## split_by_record_type.rb
 PURPOSE:
