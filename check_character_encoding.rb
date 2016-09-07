@@ -1,27 +1,37 @@
+# Usage:
+# ruby check_character_encoding.rb path_to/mrc_file.mrc
+
+# Creates two new .mrc files in the same location as the input file. One will have _UTF8.mrc on the end and the other will have _MARC8.mrc
+# Writes each record from the input file to the appropriate new file based on the value of LDR/09
+
 require 'rubygems'
 require 'marc'
-require 'enhanced_marc'
-exit if Object.const_defined?(:Ocra)
 
-puts "Enter name of .mrc file."
-puts "(If you type the first couple of letters and hit TAB, the name will probably autocomplete.)"
-
-mrcfile = gets.chomp
-
-mrcpath = "data/#{mrcfile}"
-
+mrcpath = ARGV[0]
 reader = MARC::Reader.new(mrcpath)
 
-ldrs = []
+utf8path = mrcpath.gsub(/\.mrc/, '_UTF8.mrc')
+utf8writer = MARC::Writer.new(utf8path)
+utf8ct = 0
 
-reader.each {|r| ldrs << r.leader}
+marc8path = mrcpath.gsub(/\.mrc/, '_MARC8.mrc')
+marc8writer = MARC::Writer.new(marc8path)
+marc8ct = 0
 
-enc = []
+invalidct = 0
 
-ldrs.each {|l| enc << l[9]}
-
-if enc.include?(97)
-  File.new('data/utf8.txt', 'w')
-else
-  File.new('data/mrc8.txt', 'w')
+reader.each do |rec|
+  if rec.leader[9] == 'a'
+    utf8writer.write(rec)
+    utf8ct += 1
+  elsif rec.leader[9] == ' '
+    marc8writer.write(rec)
+    marc8ct += 1
+  else
+    invalidct += 1
   end
+end
+
+puts "#{utf8ct} UTF8 records written to #{utf8path}."
+puts "#{marc8ct} MARC8 records written to #{marc8path}."
+puts "Some records had invalid code in LDR/09" if invalidct > 0
