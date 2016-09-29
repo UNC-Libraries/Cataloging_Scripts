@@ -17,7 +17,7 @@ outfile = ARGV[2]
 
 # Get 001 values from file b
 b001s = []
-puts "Getting 001 values from #{b}..."
+puts "\nGetting 001 values from #{b}..."
 MARC::Reader.new(b).each do |rec|
   m001s = rec.find_all {|field| field.tag == '001'}
   if m001s.size > 1
@@ -25,7 +25,7 @@ MARC::Reader.new(b).each do |rec|
   elsif m001s.size == 0
     puts "#{b} contains record with NO 001 field. Results do not include this record!"
   else
-    the001 = m001s[0].value.gsub!(/\s*oc?[mn](\d+)[^0-9]*/, '\1')
+    the001 = m001s[0].value.gsub(/\s*oc?[mn](\d+)\D*/, '\1')
     b001s << the001
   end
 end #MARC::Reader.new(b).each do |rec|
@@ -35,7 +35,7 @@ puts "#{b001s.size} 001s in #{b}"
 writer = MARC::Writer.new(outfile)
 
 # Go through records in file a, writing each to outfile unless its 001 was in file b
-puts "Examining records from #{a}..."
+puts "\nExamining records from #{a}..."
 all_ct = 0
 keeper_ct = 0
 MARC::Reader.new(a).each do |rec|
@@ -47,7 +47,7 @@ MARC::Reader.new(a).each do |rec|
     puts "#{a} contains record with NO 001 field. Results do not include this record!"
   else
     the001 = m001s[0].value
-    the001.gsub!(/\s*oc?[mn](\d+)[^0-9]*/, '\1')
+    the001.gsub!(/\s*oc?[mn](\d+)\D*/, '\1')
  #   puts the001
     unless b001s.include?(the001)
       writer.write(rec)
@@ -55,6 +55,6 @@ MARC::Reader.new(a).each do |rec|
     end
   end
 end #MARC::Reader.new(a).each do |rec|
-puts "\n\nDONE!\n#{all_ct} records in #{a}.\n#{keeper_ct} records kept.\n"
+puts "#{all_ct} records in #{a}.\n\n#{keeper_ct} records kept in output file.\nDone!"
 
 writer.close
