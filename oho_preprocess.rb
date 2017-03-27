@@ -18,7 +18,7 @@
 require 'marc'
 
 fullmrc = ARGV[0]
-report = File.open('report.csv', 'w')
+to_report = []
 outfilename = fullmrc.gsub(/\.mrc/, '') + '_to_prep.mrc'
 marcout = MARC::Writer.new(outfilename)
 
@@ -45,15 +45,19 @@ ilsdata.each_pair { |k, v|
   if vsize > 1
     v.sort!
     v.shift(vsize - 1)
-    report.write("#{k},duplicate records in ILS\n")
+    to_report << "#{k},duplicate records in ILS\n"
   end
 }
 
 overlays = 0
 inserts = 0
 
+new_rec_ct = 0
+new_001s = []
 MARC::Reader.new(fullmrc).each { |rec|
+  new_rec_ct += 1
   this001 = rec['001'].value
+  new_001s << this001
   this005 = rec['005'].value
   if ilsdata.has_key?(this001)
     last005 = ilsdata[this001][0]
@@ -72,3 +76,15 @@ marcout.close
 
 puts "Expected inserted records: #{inserts}"
 puts "Expected overlaid records: #{overlays}"
+
+new_001s.uniq!
+
+if new_001s.size != new_rec_ct
+  to_report << "na, check file retrieved from OUP for recs with duplicate 001s"
+end
+
+if to_report.size > 0
+  report = File.open('report.csv', 'w')
+  to_report.each { |ln| report.puts ln }
+  report.close
+end
