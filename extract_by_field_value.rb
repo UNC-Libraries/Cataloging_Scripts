@@ -7,8 +7,8 @@ require "trie"
 require "marc"
 require 'highline/import'
 
-mrcfile = "data/file_to_split.mrc"
-valfile = "data/value_list.txt"
+mrcfile = ARGV[0]
+valfile = ARGV[1]
 tag = ask("Enter the 3-digit MARC field tag you want to match on (example: 001)")
 subfield = ask("If you want to match on a specific subfield in that MARC tag, enter the subfield delimter (example: z). If you want to match on the whole field, just hit Enter.")
 
