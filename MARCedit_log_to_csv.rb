@@ -34,9 +34,9 @@ lines.each do |line|
       s = StringScanner.new(line)
       s.scan /^(\d{3})(-)(.*?)(:\s*)(.*)/
       @errs << ["'#{s[1]}", s[3], s[5], the001, the245, recno]
-    elsif line =~ /^\d{3}:\s*.*/
+    elsif line =~ /^(\d{3}|\dXX):\s*.*/
       s = StringScanner.new(line)
-      s.scan /^(\d{3})(:\s*)(.*)/
+      s.scan /^(\d{3}|\dXX)(:\s*)(.*)/
       @errs << ["'#{s[1]}", '', s[3], the001, the245, recno]
     end
   end
