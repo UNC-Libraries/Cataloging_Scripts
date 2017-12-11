@@ -107,7 +107,9 @@ CSV.open('springer_dupe_output.csv', "wb") do |csv|
   out.each { |ln| csv << ln }
 end
 
-
+File.write('springer_dupe_output_delete_bnums.txt',
+            out.select{ |ln| ln[0] == 'delete' }.map{ |ln| ln[1] }.join("\n")
+)
 
 
 
