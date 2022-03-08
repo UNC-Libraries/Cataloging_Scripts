@@ -19,7 +19,7 @@ class Record
       @wcmrec = false
     end
     @urls = []
-    row[2].split(';').each { |url| @urls << url }
+    row[2].split(';').each { |url| @urls << url } if row[2]
     row[3].split(';').each { |url| @urls << url } if row[3]
     @suppressed = true if row[3]
 
@@ -85,7 +85,7 @@ dupe_urls.each do |url, bnums|
         if rechash[bnum].wcmrec
           out << ['keep--wcm record', bnum, set_bnums, rec_urls]
         else
-          out << ['delete', bnum, set_bnums, rec_urls] 
+          out << ['delete', bnum, set_bnums, rec_urls]
         end
       end
       if wcm_status.select{|wcm| wcm == 'y'}.size > 1
@@ -100,7 +100,7 @@ dupe_urls.each do |url, bnums|
     else
       out << ['check', 'records have varying urls; no WCM rec(s) in set', set_bnums, rec_urls]
     end
-  end  
+  end
 end
 
 CSV.open('springer_dupe_output.csv', "wb") do |csv|
